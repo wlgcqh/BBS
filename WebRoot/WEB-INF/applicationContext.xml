@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"   
+    xmlns:tx="http://www.springframework.org/schema/tx" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+	
+		<property name="driverClassName">
+			<value>com.mysql.jdbc.Driver</value>
+		</property>
+		
+		<property name="url">
+			<value>jdbc:mysql://localhost:3306/hibernate</value>
+		</property>
+		
+		<property name="username">
+			<value>root</value>
+		</property>
+		
+		<property name="password">
+			<value>admin</value>
+		</property>
+		
+	</bean>
+	
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource"/>
+		</property>
+		
+		<property name="packagesToScan">
+			<value>com.qiheng.bean</value>
+		</property>
+	
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
+			</props>
+		
+		</property>
+	
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+	
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<tx:advice id="txadvice" transaction-manager="transactionManager">
+	
+		<tx:attributes>
+		
+			<tx:method name="exist" read-only="true" propagation="REQUIRED"/>
+			<tx:method name="update*" propagation="REQUIRED"/>
+			<tx:method name="add*" propagation="REQUIRED"/>
+			<tx:method name="delete" propagation="REQUIRED"/>
+			<tx:method name="*" propagation="REQUIRED"/>
+		</tx:attributes>
+	
+	</tx:advice>
+	
+	<aop:config proxy-target-class="true">
+	
+		<aop:pointcut expression="execution(* com.qiheng.service.*.*(..))" id="methods"/>
+		<aop:advisor advice-ref="txadvice" pointcut-ref="methods"/>
+	</aop:config>
+	
+	
+	<!-- DAO -->
+	<bean id="userDAO" class="com.qiheng.DAO.impl.UserDAOImpl" scope="singleton">
+		<property name="sessionFactory" ref="sessionFactory">
+		</property>
+	</bean>
+	
+	<bean id="postDAO" class="com.qiheng.DAO.impl.PostDAOImpl" scope="singleton">
+		<property name="sessionFactory" ref="sessionFactory">
+		</property>
+	</bean>
+	
+	<bean id="groudDAO" class="com.qiheng.DAO.impl.GroudDAOImpl" scope="singleton">
+		<property name="sessionFactory" ref="sessionFactory">
+		</property>
+	</bean>
+	
+	<bean id="adminDAO" class="com.qiheng.DAO.impl.AdminDAOImpl" scope="singleton">
+		<property name="sessionFactory" ref="sessionFactory">
+		</property>
+	</bean>
+	
+	<!-- Service -->
+	<bean id="userService" class="com.qiheng.service.impl.UserServiceImpl" scope="singleton">
+		<property name="dao" ref="userDAO"></property>
+	</bean>
+	
+	<bean id="postService" class="com.qiheng.service.impl.PostServiceImpl" scope="singleton">
+		<property name="postDao" ref="postDAO"></property>
+	</bean>
+	
+	<bean id="groudService" class="com.qiheng.service.impl.GroudServiceImpl" scope="singleton">
+		<property name="groudDao" ref="groudDAO"></property>
+	</bean>
+	
+	<bean id="adminService" class="com.qiheng.service.impl.AdminServiceImpl" scope="singleton">
+		<property name="dao" ref="adminDAO"></property>
+	</bean>
+	
+	<!-- User Action -->
+	<bean id="User_registerAction" class="com.qiheng.action.User_RegisterAction" scope="prototype">
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	<bean id="User_loginAction" class="com.qiheng.action.User_LoginAction" scope="prototype">
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	<bean id="User_loginInputAction" class="com.qiheng.action.User_LoginInputAction" scope="prototype">
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	<bean id="User_infoAction" class="com.qiheng.action.User_InfoAction" scope="prototype">
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	<bean id="User_updateInputAction" class="com.qiheng.action.User_UpdateInputAction" scope="prototype">
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	<bean id="User_updateAction" class="com.qiheng.action.User_UpdateAction" scope="prototype">
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	<bean id="User_exitAction" class="com.qiheng.action.User_ExitAction" scope="prototype">
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	
+	<!-- Post Action -->
+	<bean id="Post_listAction" class="com.qiheng.action.Post_ListAction" scope="prototype">
+		<property name="groudService" ref="groudService"></property>
+		<property name="postService" ref="postService"></property>
+	</bean>
+	
+	<bean id="Post_listOneAction" class="com.qiheng.action.Post_ListOneAction" scope="prototype">
+		<property name="groudService" ref="groudService"></property>
+		<property name="postService" ref="postService"></property>
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	<bean id="Post_addInputAction" class="com.qiheng.action.Post_AddInputAction" scope="prototype">
+		<property name="groudService" ref="groudService"></property>
+		<property name="postService" ref="postService"></property>
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	<bean id="Post_addAction" class="com.qiheng.action.Post_AddAction" scope="prototype">
+		<property name="groudService" ref="groudService"></property>
+		<property name="postService" ref="postService"></property>
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	<bean id="Post_replyAction" class="com.qiheng.action.Post_ReplyAction" scope="prototype">
+		<property name="groudService" ref="groudService"></property>
+		<property name="postService" ref="postService"></property>
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	<bean id="Post_userlistAction" class="com.qiheng.action.Post_UserlistAction" scope="prototype">
+		<property name="groudService" ref="groudService"></property>
+		<property name="postService" ref="postService"></property>
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	
+	<!-- Admin Action -->
+	<bean id="Admin_addInputAction" class="com.qiheng.action.Admin_AddInputAction" scope="prototype">
+		<property name="groudService" ref="groudService"></property>
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	<bean id="Admin_addAction" class="com.qiheng.action.Admin_AddAction" scope="prototype">
+		<property name="groudService" ref="groudService"></property>
+		<property name="userService" ref="userService"></property>
+		<property name="adminService" ref="adminService"></property>
+	</bean>
+	
+	<bean id="Admin_listAction" class="com.qiheng.action.Admin_ListAction" scope="prototype">
+		<property name="groudService" ref="groudService"></property>
+		<property name="userService" ref="userService"></property>
+		<property name="adminService" ref="adminService"></property>
+	</bean>
+	
+	<bean id="Admin_userListAction" class="com.qiheng.action.Admin_UserListAction" scope="prototype">
+		<property name="groudService" ref="groudService"></property>
+		<property name="userService" ref="userService"></property>
+		<property name="adminService" ref="adminService"></property>
+	</bean>
+	
+	<bean id="Admin_userDeleteAction" class="com.qiheng.action.Admin_UserDeleteAction" scope="prototype">
+		<property name="groudService" ref="groudService"></property>
+		<property name="userService" ref="userService"></property>
+		<property name="adminService" ref="adminService"></property>
+	</bean>
+	
+	<bean id="Admin_postListAction" class="com.qiheng.action.Admin_PostListAction" scope="prototype">
+		<property name="groudService" ref="groudService"></property>
+		<property name="userService" ref="userService"></property>
+		<property name="adminService" ref="adminService"></property>
+		<property name="postService" ref="postService"></property>
+	</bean>
+	
+	<bean id="Admin_postDeleteAction" class="com.qiheng.action.Admin_PostDeleteAction" scope="prototype">
+		<property name="groudService" ref="groudService"></property>
+		<property name="userService" ref="userService"></property>
+		<property name="adminService" ref="adminService"></property>
+		<property name="postService" ref="postService"></property>
+	</bean>
+
+</beans>

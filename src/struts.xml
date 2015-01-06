@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+
+	<!-- User 普通用户-->
+	<package name="user" extends="struts-default" namespace="/user">
+
+		<action name="User_register" class="User_registerAction">
+			<result name="success">/user/User_registerSuccess.jsp</result>
+			<result name="error">/user/User_register.jsp</result>
+		</action>
+
+		<action name="User_login" class="User_loginAction">
+			<result name="success">/user/User_loginSuccess.jsp</result>
+			<result name="error">/user/User_loginFail.jsp</result>
+		</action>
+		
+		<action name="User_loginInput" class="User_loginInputAction">
+			<result name="success">/user/User_loginInput.jsp</result>
+		</action>
+
+		<action name="User_info" class="User_infoAction">
+			<result name="success">/user/User_info.jsp</result>
+		</action>
+		
+		<action name="User_updateInput" class="User_updateInputAction">
+			<result name="success">/user/User_updateInput.jsp</result>
+		</action>
+		
+		<action name="User_update" class="User_updateAction">
+			<result name="success">/user/User_update.jsp</result>
+			<result name="error">/user/User_updateInput.jsp</result>
+		</action>
+		
+		<action name="User_exit" class="User_exitAction">
+			<result name="success">/user/User_exit.jsp</result>
+		</action>
+
+	</package>
+
+
+	<!-- Admin 管理员-->
+	<package name="admin" extends="struts-default" namespace="/admin">
+
+		<action name="Admin_addInput" class="Admin_addInputAction">
+			<result name="success">/admin/Admin_addInput.jsp</result>
+		
+		</action>
+		
+		<action name="Admin_add" class="Admin_addAction">
+			<result name="success">/admin/Admin_add.jsp</result>
+		
+		</action>
+		
+		<action name="Admin_list" class="Admin_listAction">
+			<result name="success">/admin/Admin_list.jsp</result>
+		</action>
+		
+		<action name="Admin_userList" class="Admin_userListAction">
+			<result name="success">/admin/Admin_userList.jsp</result>
+		</action>
+		
+		<action name="Admin_userDelete" class="Admin_userDeleteAction">
+			<result name="success">/admin/Admin_userDelete.jsp</result>
+		</action>
+		
+		<action name="Admin_postList" class="Admin_postListAction">
+			<result name="success">/admin/Admin_postList.jsp</result>
+		</action>
+		
+		<action name="Admin_postDelete" class="Admin_postDeleteAction">
+			<result name="success">/admin/Admin_postDelete.jsp</result>
+		</action>
+
+	</package>
+
+
+	<!-- Post 帖子-->
+	<package name="post" extends="struts-default" namespace="/post">
+
+		<action name="Post_list" class="Post_listAction">
+			<result name="success">/post/Post_list.jsp</result>		
+		</action>
+		
+		<action name="Post_listOne" class="Post_listOneAction">
+			<result name="success">/post/Post_listOne.jsp</result>		
+		</action>
+		
+		<action name="Post_addInput" class="Post_addInputAction">
+			<result name="success">/post/Post_addInput.jsp</result>		
+		</action>
+		
+		<action name="Post_add" class="Post_addAction">
+			<result name="success">/post/Post_add.jsp</result>		
+		</action>
+		
+		<action name="Post_reply" class="Post_replyAction">
+			<result name="success">/post/Post_reply.jsp</result>		
+		</action>
+		
+		<action name="Post_userlist" class="Post_userlistAction">
+			<result name="success">/post/Post_userlist.jsp</result>		
+		</action>
+
+	</package>
+
+</struts>

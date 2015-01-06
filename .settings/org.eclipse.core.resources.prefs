@@ -1,0 +1,10 @@
+eclipse.preferences.version=1
+encoding//src/com/qiheng/DAO/GroudDAO.java=UTF-8
+encoding//src/com/qiheng/DAO/PostDAO.java=UTF-8
+encoding//src/com/qiheng/info/AdminInfo.java=UTF-8
+encoding//src/com/qiheng/info/PostInfo.java=UTF-8
+encoding//src/com/qiheng/service/AdminService.java=UTF-8
+encoding//src/com/qiheng/service/GroudService.java=UTF-8
+encoding//src/com/qiheng/service/PostService.java=UTF-8
+encoding//src/com/qiheng/service/impl/GroudServiceImpl.java=UTF-8
+encoding//src/com/qiheng/service/impl/PostServiceImpl.java=UTF-8
